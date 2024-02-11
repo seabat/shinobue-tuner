@@ -23,6 +23,7 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler
 import be.tarsos.dsp.pitch.PitchProcessor
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
+import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScale
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
@@ -63,14 +64,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun initTarsosDsp() {
-        val dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0)
+        val dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 1024, 0)
 
         val pdh = PitchDetectionHandler { res, e ->
             val pitchInHz = res.pitch
             runOnUiThread { processPitch(pitchInHz) }
         }
         val pitchProcessor: AudioProcessor =
-            PitchProcessor(PitchEstimationAlgorithm.FFT_YIN, 22050f, 1024, pdh)
+            PitchProcessor(PitchEstimationAlgorithm.FFT_YIN, 44100f, 1024, pdh)
         dispatcher.addAudioProcessor(pitchProcessor)
 
         val audioThread = Thread(dispatcher, "Audio Thread")
@@ -79,34 +80,8 @@ class MainActivity : ComponentActivity() {
 
     private fun processPitch(pitchInHz: Float) {
         pitchInHzStateFlow.value = pitchInHz
-        if(pitchInHz >= 110 && pitchInHz < 123.47) {
-            //A
-            noteStateFlow.value = "A"
-        }
-        else if(pitchInHz >= 123.47 && pitchInHz < 130.81) {
-            //B
-            noteStateFlow.value = "B"
-        }
-        else if(pitchInHz >= 130.81 && pitchInHz < 146.83) {
-            //C
-            noteStateFlow.value = "C"
-        }
-        else if(pitchInHz >= 146.83 && pitchInHz < 164.81) {
-            //D
-            noteStateFlow.value = "D"
-        }
-        else if(pitchInHz >= 164.81 && pitchInHz < 174.61) {
-            //E
-            noteStateFlow.value = "E"
-        }
-        else if(pitchInHz >= 174.61 && pitchInHz < 185) {
-            //F
-            noteStateFlow.value = "F"
-        }
-        else if(pitchInHz >= 185 && pitchInHz < 196) {
-            //G
-            noteStateFlow.value = "G"
-        }
+        val scale = ShinobueScale()(pitchInHz)
+        noteStateFlow.value = "${scale.ja}/${scale.en}"
     }
 }
 
@@ -122,7 +97,7 @@ fun Greeting(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row {
-            Text(text = "ノート：")
+            Text(text = "音階：")
             Text(text = "${note}")
         }
         Row {
