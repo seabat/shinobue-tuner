@@ -17,6 +17,7 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler
 import dev.seabat.android.shinobuetuner.compose.HomeScreen
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScale
+import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     private val pitchInHzStateFlow = MutableStateFlow(0.0f)
-    private val noteStateFlow = MutableStateFlow("")
+    private val noteStateFlow = MutableStateFlow(ShinobueScaleType.UNKNOWN)
     private val diffPitchStateFlow = MutableStateFlow(0)
 
     private var safeStopAudioRunnable: SafeStopAudioRunnable? = null
@@ -62,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(hz = pitchInHzState, diffRate = diffPitchState, note = noteState)
+                    HomeScreen(hz = pitchInHzState, diffRate = diffPitchState, scaleType = noteState)
                 }
             }
         }
@@ -90,7 +91,7 @@ class MainActivity : ComponentActivity() {
     private fun processPitch(pitchInHz: Float) {
         pitchInHzStateFlow.value = pitchInHz
         val scale = ShinobueScale()(pitchInHz)
-        noteStateFlow.value = "${scale.first.scaleType.ja}/${scale.first.scaleType.en}"
+        noteStateFlow.value = scale.first
         diffPitchStateFlow.value = scale.second
         Log.d("shinobue", "Hz: $pitchInHz Diff: ${scale.second}")
     }

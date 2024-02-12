@@ -1,11 +1,15 @@
 package dev.seabat.android.shinobuetuner.compose
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
@@ -13,32 +17,100 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
 import kotlin.math.roundToInt
+import dev.seabat.android.shinobuetuner.R
+import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     hz: Float,
     diffRate: Int,
-    note: String
+    scaleType: ShinobueScaleType
 ) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = Color.White)
     ) {
-        Row {
-            Text(text = "音階：")
-            Text(text = note)
+        Image(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(30.dp)
+                .fillMaxHeight(),
+            contentScale = ContentScale.FillHeight,
+            alpha = 0.2f,
+            painter = painterResource(id = R.drawable.clef_a07), contentDescription = ""
+        )
+        Column(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(30.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(verticalAlignment = Alignment.Bottom) {
+                if (scaleType == ShinobueScaleType.UNKNOWN) {
+                    Text(
+                        text = "",
+                        color = Color.Black,
+                        fontSize =  70.sp
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
+                        text = "",
+                        color = Color.Black,
+                        fontSize =  30.sp
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
+                        text = "",
+                        color = Color.Black,
+                        fontSize =  30.sp
+                    )
+                } else {
+                    Text(
+                        text = scaleType.scaleType.ja,
+                        color = Color.Black,
+                        fontSize =  70.sp
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
+                        text = scaleType.scaleType.level.toString(),
+                        color = Color.Black,
+                        fontSize =  30.sp
+                    )
+                    Text(
+                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
+                        text = "(${scaleType.scaleType.en})",
+                        color = Color.Black,
+                        fontSize =  30.sp
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    text = if (hz == -1.0f) "0" else hz.roundToInt().toString(),
+                    color = Color.Black,
+                    fontSize =  40.sp
+                )
+                Text(
+                    text = "Hz",
+                    color = Color.Black,
+                    fontSize =  30.sp
+                )
+            }
+            RateBar(diffRate)
         }
-        Row {
-            Text(text = "周波数：")
-            Text(text = hz.toString())
-        }
-        RateBar(diffRate)
     }
 }
 
@@ -57,7 +129,7 @@ fun RateBox(color: Color) {
 
 @Composable
 fun RateBar(diffRate: Int) {
-    Row {
+    Row(modifier = Modifier.padding(vertical = 30.dp)) {
         when((diffRate/10.0f).roundToInt()) {
             -10 -> {
                 for (i in 1..10) {
@@ -295,6 +367,6 @@ fun RateBarPreview() {
 @Composable
 fun HomeScreenPreview() {
     ShinobueTunerTheme {
-        HomeScreen(hz = 130.81f, diffRate = 10, note = "A")
+        HomeScreen(hz = 130.81f, diffRate = 10, scaleType = ShinobueScaleType.A4)
     }
 }
