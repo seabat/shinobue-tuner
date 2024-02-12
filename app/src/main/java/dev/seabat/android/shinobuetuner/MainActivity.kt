@@ -1,6 +1,8 @@
 package dev.seabat.android.shinobuetuner
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,14 +19,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import be.tarsos.dsp.AudioProcessor
-import be.tarsos.dsp.io.android.AudioDispatcherFactory
+import androidx.core.content.ContextCompat
 import be.tarsos.dsp.pitch.PitchDetectionHandler
-import be.tarsos.dsp.pitch.PitchProcessor
-import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 class MainActivity : ComponentActivity() {
@@ -32,12 +34,12 @@ class MainActivity : ComponentActivity() {
     private val pitchInHzStateFlow = MutableStateFlow(0.0f)
     private val noteStateFlow = MutableStateFlow("")
 
+    private var safeStopAudioRunnable: SafeStopAudioRunnable? = null
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted) {
-            initTarsosDsp()
-        } else {
+        if (!granted) {
             //TODO: エラーダイアログを表示する
         }
     }
@@ -45,7 +47,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+        ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.RECORD_AUDIO
+        ).let {
+            if (it != PackageManager.PERMISSION_GRANTED) {
+                requestPermissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+            }
+        }
 
         setContent {
             val pitchInHzState by pitchInHzStateFlow.collectAsState()
@@ -63,22 +72,27 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun initTarsosDsp() {
-        val dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 1024, 0)
-
-        val pdh = PitchDetectionHandler { res, e ->
-            val pitchInHz = res.pitch
-            runOnUiThread { processPitch(pitchInHz) }
+    override fun onResume() {
+        super.onResume()
+        safeStopAudioRunnable = SafeStopAudioRunnable {
+            PitchDetectionHandler { res, _ ->
+                val pitchInHz = res.pitch
+                GlobalScope.launch(Dispatchers.Main) {
+                    processPitch(pitchInHz)
+                }
+            }
+        }.apply {
+            run()
         }
-        val pitchProcessor: AudioProcessor =
-            PitchProcessor(PitchEstimationAlgorithm.FFT_YIN, 44100f, 1024, pdh)
-        dispatcher.addAudioProcessor(pitchProcessor)
+    }
 
-        val audioThread = Thread(dispatcher, "Audio Thread")
-        audioThread.start()
+    override fun onPause() {
+        super.onPause()
+        safeStopAudioRunnable?.stop()
     }
 
     private fun processPitch(pitchInHz: Float) {
+        Log.d("shinobue", "$pitchInHz")
         pitchInHzStateFlow.value = pitchInHz
         val scale = ShinobueScale()(pitchInHz)
         noteStateFlow.value = "${scale.ja}/${scale.en}"
@@ -98,11 +112,11 @@ fun Greeting(
     ) {
         Row {
             Text(text = "音階：")
-            Text(text = "${note}")
+            Text(text = note)
         }
         Row {
             Text(text = "周波数：")
-            Text(text = "${hz.toString()}")
+            Text(text = hz.toString())
         }
     }
 }
