@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
 
     private val pitchInHzStateFlow = MutableStateFlow(0.0f)
     private val noteStateFlow = MutableStateFlow("")
+    private val diffPitchStateFlow = MutableStateFlow(0.0f)
 
     private var safeStopAudioRunnable: SafeStopAudioRunnable? = null
 
@@ -59,6 +60,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val pitchInHzState by pitchInHzStateFlow.collectAsState()
             val noteState by noteStateFlow.collectAsState()
+            val diffPitchState by diffPitchStateFlow.collectAsState()
 
             ShinobueTunerTheme {
                 // A surface container using the 'background' color from the theme
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(hz = pitchInHzState, note = noteState)
+                    Greeting(hz = pitchInHzState, diffHz = diffPitchState, note = noteState)
                 }
             }
         }
@@ -95,7 +97,8 @@ class MainActivity : ComponentActivity() {
         Log.d("shinobue", "$pitchInHz")
         pitchInHzStateFlow.value = pitchInHz
         val scale = ShinobueScale()(pitchInHz)
-        noteStateFlow.value = "${scale.ja}/${scale.en}"
+        noteStateFlow.value = "${scale.first.ja}/${scale.first.en}"
+        diffPitchStateFlow.value = scale.second
     }
 }
 
@@ -103,6 +106,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(
     modifier: Modifier = Modifier,
     hz: Float,
+    diffHz: Float,
     note: String
 ) {
     Column(
@@ -115,6 +119,10 @@ fun Greeting(
             Text(text = note)
         }
         Row {
+            Text(text = "差分：")
+            Text(text = diffHz.toString())
+        }
+        Row {
             Text(text = "周波数：")
             Text(text = hz.toString())
         }
@@ -125,6 +133,6 @@ fun Greeting(
 @Composable
 fun GreetingPreview() {
     ShinobueTunerTheme {
-        Greeting(hz = 130.81f, note = "A")
+        Greeting(hz = 130.81f, diffHz = 3.09f, note = "A")
     }
 }
