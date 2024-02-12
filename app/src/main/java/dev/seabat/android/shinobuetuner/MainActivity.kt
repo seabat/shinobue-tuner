@@ -6,21 +6,15 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import be.tarsos.dsp.pitch.PitchDetectionHandler
+import dev.seabat.android.shinobuetuner.compose.HomeScreen
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScale
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +62,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(hz = pitchInHzState, diffHz = diffPitchState, note = noteState)
+                    HomeScreen(hz = pitchInHzState, diffRate = diffPitchState, note = noteState)
                 }
             }
         }
@@ -102,37 +96,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(
-    modifier: Modifier = Modifier,
-    hz: Float,
-    diffHz: Int,
-    note: String
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row {
-            Text(text = "音階：")
-            Text(text = note)
-        }
-        Row {
-            Text(text = "差分：")
-            Text(text = diffHz.toString())
-        }
-        Row {
-            Text(text = "周波数：")
-            Text(text = hz.toString())
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ShinobueTunerTheme {
-        Greeting(hz = 130.81f, diffHz = 10, note = "A")
-    }
-}
