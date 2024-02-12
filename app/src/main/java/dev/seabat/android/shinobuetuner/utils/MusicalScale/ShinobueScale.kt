@@ -1,98 +1,118 @@
 package dev.seabat.android.shinobuetuner.utils.MusicalScale
 
+import android.util.Log
+import kotlin.math.roundToInt
+
 class ShinobueScale : MusicalScaleContract {
-    override fun invoke(pitchInHz: Float): Pair<MusicalScaleType, Float> {
-        return if(pitchInHz >= 127.666f && pitchInHz < 135.258f) {
-            MusicalScaleType.C3 to (pitchInHz - 131.407f)
+    override fun invoke(pitchInHz: Float): Pair<ShinobueScaleType, Int> {
+        return if (pitchInHz >= ShinobueScaleType.C3.startHz && pitchInHz < ShinobueScaleType.C3.endHz) {
+            ShinobueScaleType.C3 to calcDiffRate(pitchInHz, ShinobueScaleType.C3)
         }
-        else if(pitchInHz >= 135.258f && pitchInHz < 143.301f) {
-            MusicalScaleType.Cs3 to (pitchInHz - 139.221f)
+        else if (pitchInHz >= ShinobueScaleType.Cs3.startHz && pitchInHz < ShinobueScaleType.Cs3.endHz) {
+            ShinobueScaleType.Cs3 to calcDiffRate(pitchInHz, ShinobueScaleType.Cs3)
         }
-        else if(pitchInHz >= 143.301 && pitchInHz < 151.822) {
-            MusicalScaleType.D3 to (pitchInHz - 147.500f)
+        else if(pitchInHz >= ShinobueScaleType.D3.startHz && pitchInHz < ShinobueScaleType.D3.endHz) {
+            ShinobueScaleType.D3 to calcDiffRate(pitchInHz, ShinobueScaleType.D3)
         }
-        else if(pitchInHz >= 151.822 && pitchInHz < 160.850) {
-            MusicalScaleType.Ds3  to (pitchInHz - 156.271f)
+        else if(pitchInHz >= ShinobueScaleType.Ds3.startHz && pitchInHz < ShinobueScaleType.Ds3.endHz) {
+            ShinobueScaleType.Ds3 to calcDiffRate(pitchInHz, ShinobueScaleType.Ds3)
         }
-        else if(pitchInHz >= 160.850 && pitchInHz < 170.414) {
-            MusicalScaleType.E3  to (pitchInHz - 165.563f)
+        else if(pitchInHz >= ShinobueScaleType.E3.startHz && pitchInHz < ShinobueScaleType.E3.endHz) {
+            ShinobueScaleType.E3 to calcDiffRate(pitchInHz, ShinobueScaleType.E3)
         }
-        else if(pitchInHz >= 170.414 && pitchInHz < 180.548) {
-            MusicalScaleType.F3 to (pitchInHz - 175.408f)
+        else if(pitchInHz >= ShinobueScaleType.F3.startHz && pitchInHz < ShinobueScaleType.F3.endHz) {
+            ShinobueScaleType.F3 to calcDiffRate(pitchInHz, ShinobueScaleType.F3)
         }
-        else if(pitchInHz >= 180.548 && pitchInHz < 191.284) {
-            MusicalScaleType.Fs3 to (pitchInHz - 185.838f)
+        else if(pitchInHz >= ShinobueScaleType.Fs3.startHz && pitchInHz < ShinobueScaleType.Fs3.endHz) {
+            ShinobueScaleType.Fs3 to calcDiffRate(pitchInHz, ShinobueScaleType.Fs3)
         }
-        else if(pitchInHz >= 191.284 && pitchInHz < 202.658) {
-            MusicalScaleType.G3 to (pitchInHz - 196.889f)
+        else if(pitchInHz >= ShinobueScaleType.G3.startHz && pitchInHz < ShinobueScaleType.G3.endHz) {
+            ShinobueScaleType.G3 to calcDiffRate(pitchInHz, ShinobueScaleType.G3)
         }
-        else if(pitchInHz >= 202.658 && pitchInHz < 214.709) {
-            MusicalScaleType.Gs3 to (pitchInHz - 208.596f)
+        else if(pitchInHz >= ShinobueScaleType.Gs3.startHz && pitchInHz < ShinobueScaleType.Gs3.endHz) {
+            ShinobueScaleType.Gs3 to calcDiffRate(pitchInHz, ShinobueScaleType.Gs3)
         }
-        else if(pitchInHz >= 214.709 && pitchInHz < 227.476) {
-            MusicalScaleType.A3 to (pitchInHz - 221.000f)
+        else if(pitchInHz >= ShinobueScaleType.A3.startHz && pitchInHz < ShinobueScaleType.A3.endHz) {
+            ShinobueScaleType.A3 to calcDiffRate(pitchInHz, ShinobueScaleType.A3)
         }
-        else if(pitchInHz >= 227.476 && pitchInHz < 241.002) {
-            MusicalScaleType.As3 to (pitchInHz - 234.141f)
+        else if(pitchInHz >= ShinobueScaleType.As3.startHz && pitchInHz < ShinobueScaleType.As3.endHz) {
+            ShinobueScaleType.As3 to calcDiffRate(pitchInHz, ShinobueScaleType.As3)
         }
-        else if(pitchInHz >= 241.002 && pitchInHz < 255.333) {
-            MusicalScaleType.B3 to (pitchInHz - 248.064f)
+        else if(pitchInHz >= ShinobueScaleType.B3.startHz && pitchInHz < ShinobueScaleType.B3.endHz) {
+            ShinobueScaleType.B3 to calcDiffRate(pitchInHz, ShinobueScaleType.B3)
         }
-        else if(pitchInHz >= 255.333 && pitchInHz < 270.516) {
-            MusicalScaleType.C4 to (pitchInHz - 262.815f)
+        else if(pitchInHz >= ShinobueScaleType.C4.startHz && pitchInHz < ShinobueScaleType.C4.endHz) {
+            ShinobueScaleType.C4 to calcDiffRate(pitchInHz, ShinobueScaleType.C4)
         }
-        else if(pitchInHz >= 270.516 && pitchInHz < 286.602) {
-            MusicalScaleType.Cs4 to (pitchInHz - 278.443f)
+        else if(pitchInHz >= ShinobueScaleType.Cs4.startHz && pitchInHz < ShinobueScaleType.Cs4.endHz) {
+            ShinobueScaleType.Cs4 to calcDiffRate(pitchInHz, ShinobueScaleType.Cs4)
         }
-        else if(pitchInHz >= 286.602 && pitchInHz < 303.644) {
-            MusicalScaleType.D4 to (pitchInHz - 295.000f)
+        else if(pitchInHz >= ShinobueScaleType.D4.startHz && pitchInHz < ShinobueScaleType.D4.endHz) {
+            ShinobueScaleType.D4 to calcDiffRate(pitchInHz, ShinobueScaleType.D4)
         }
-        else if(pitchInHz >= 303.644 && pitchInHz < 321.699) {
-            MusicalScaleType.Ds4 to (pitchInHz - 312.541f)
+        else if(pitchInHz >= ShinobueScaleType.Ds4.startHz && pitchInHz < ShinobueScaleType.Ds4.endHz) {
+            ShinobueScaleType.Ds4 to calcDiffRate(pitchInHz, ShinobueScaleType.Ds4)
         }
-        else if(pitchInHz >= 321.699 && pitchInHz < 340.829) {
-            MusicalScaleType.E4 to (pitchInHz - 331.126f)
+        else if(pitchInHz >= ShinobueScaleType.E4.startHz && pitchInHz < ShinobueScaleType.E4.endHz) {
+            ShinobueScaleType.E4 to calcDiffRate(pitchInHz, ShinobueScaleType.E4)
         }
-        else if(pitchInHz >= 340.829 && pitchInHz < 361.095) {
-            MusicalScaleType.F4 to (pitchInHz - 350.816f)
+        else if(pitchInHz >= ShinobueScaleType.F4.startHz && pitchInHz < ShinobueScaleType.F4.endHz) {
+            ShinobueScaleType.F4 to calcDiffRate(pitchInHz, ShinobueScaleType.F4)
         }
-        else if(pitchInHz >= 361.095 && pitchInHz < 382.567) {
-            MusicalScaleType.Fs4 to (pitchInHz - 371.676f)
+        else if(pitchInHz >= ShinobueScaleType.Fs4.startHz && pitchInHz < ShinobueScaleType.Fs4.endHz) {
+            ShinobueScaleType.Fs4 to calcDiffRate(pitchInHz, ShinobueScaleType.Fs4)
         }
-        else if(pitchInHz >= 382.567 && pitchInHz < 405.316) {
-            MusicalScaleType.G4 to (pitchInHz - 393.777f)
+        else if(pitchInHz >= ShinobueScaleType.G4.startHz && pitchInHz < ShinobueScaleType.G4.endHz) {
+            ShinobueScaleType.G4 to calcDiffRate(pitchInHz, ShinobueScaleType.G4)
         }
-        else if(pitchInHz >= 405.316 && pitchInHz < 429.417) {
-            MusicalScaleType.Gs4 to (pitchInHz - 417.192f)
+        else if(pitchInHz >= ShinobueScaleType.Gs4.startHz && pitchInHz < ShinobueScaleType.Gs4.endHz) {
+            ShinobueScaleType.Gs4 to calcDiffRate(pitchInHz, ShinobueScaleType.Gs4)
         }
-        else if(pitchInHz >= 429.417 && pitchInHz < 454.952) {
-            MusicalScaleType.A4 to (pitchInHz - 442.000f)
+        else if(pitchInHz >= ShinobueScaleType.A4.startHz && pitchInHz < ShinobueScaleType.A4.endHz) {
+            ShinobueScaleType.A4 to calcDiffRate(pitchInHz, ShinobueScaleType.A4)
         }
-        else if(pitchInHz >= 454.952 && pitchInHz < 482.004) {
-            MusicalScaleType.As4 to (pitchInHz - 468.283f)
+        else if(pitchInHz >= ShinobueScaleType.As4.startHz && pitchInHz < ShinobueScaleType.As4.endHz) {
+            ShinobueScaleType.As4 to calcDiffRate(pitchInHz, ShinobueScaleType.As4)
         }
-        else if(pitchInHz >= 482.004 && pitchInHz < 510.666) {
-            MusicalScaleType.B4 to (pitchInHz - 496.128f)
+        else if(pitchInHz >= ShinobueScaleType.B4.startHz && pitchInHz < ShinobueScaleType.B4.endHz) {
+            ShinobueScaleType.B4 to calcDiffRate(pitchInHz, ShinobueScaleType.B4)
         }
-        else if(pitchInHz >= 510.666 && pitchInHz < 541.032) {
-            MusicalScaleType.C5 to (pitchInHz - 525.630f)
+        else if(pitchInHz >= ShinobueScaleType.C5.startHz && pitchInHz < ShinobueScaleType.C5.endHz) {
+            ShinobueScaleType.C5 to calcDiffRate(pitchInHz, ShinobueScaleType.C5)
         }
-        else if(pitchInHz >= 541.032 && pitchInHz < 573.203) {
-            MusicalScaleType.Cs5 to (pitchInHz - 556.885f)
+        else if(pitchInHz >= ShinobueScaleType.Cs5.startHz && pitchInHz < ShinobueScaleType.Cs5.endHz) {
+            ShinobueScaleType.Cs5 to calcDiffRate(pitchInHz, ShinobueScaleType.Cs5)
         }
-        else if(pitchInHz >= 573.203 && pitchInHz < 607.288) {
-            MusicalScaleType.D5 to (pitchInHz - 589.999f)
+        else if(pitchInHz >= ShinobueScaleType.D5.startHz && pitchInHz < ShinobueScaleType.D5.endHz) {
+            ShinobueScaleType.D5 to calcDiffRate(pitchInHz, ShinobueScaleType.D5)
         }
-        else if(pitchInHz >= 607.288 && pitchInHz < 643.399) {
-            MusicalScaleType.Ds5 to (pitchInHz - 625.082f)
+        else if(pitchInHz >= ShinobueScaleType.Ds5.startHz && pitchInHz < ShinobueScaleType.Ds5.endHz) {
+            ShinobueScaleType.Ds5 to calcDiffRate(pitchInHz, ShinobueScaleType.Ds5)
         }
-        else if(pitchInHz >= 643.399 && pitchInHz < 681.657) {
-            MusicalScaleType.E5 to (pitchInHz - 662.252f)
+        else if(pitchInHz >= ShinobueScaleType.E5.startHz && pitchInHz < ShinobueScaleType.E5.endHz) {
+            ShinobueScaleType.E5 to calcDiffRate(pitchInHz, ShinobueScaleType.E5)
         }
-        else if(pitchInHz >= 681.657 && pitchInHz < 722.191) {
-            MusicalScaleType.F5 to (pitchInHz - 701.631f)
+        else if(pitchInHz >= ShinobueScaleType.F5.startHz && pitchInHz < ShinobueScaleType.F5.endHz) {
+            ShinobueScaleType.F5 to calcDiffRate(pitchInHz, ShinobueScaleType.F5)
         } else {
-            MusicalScaleType.UNKNOWN to (0.0f)
+            ShinobueScaleType.UNKNOWN to 0
         }
+    }
+
+    /**
+     * 音階 Hz と実際の Hz との差分の100分率を求める
+     */
+    private fun calcDiffRate(hz: Float, scaleType: ShinobueScaleType): Int {
+        val maxDiff = (scaleType.endHz - scaleType.startHz)/2
+        val diff = hz -scaleType.hz
+
+        // 差分の割合
+        val diffRate = diff/maxDiff * 100
+
+        // 四捨五入する
+        val round = diffRate.roundToInt()
+
+        Log.d("shinobue", "diff=$diff diffRate=$diffRate")
+        return round
     }
 }

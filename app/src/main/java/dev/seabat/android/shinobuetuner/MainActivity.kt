@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
     private val pitchInHzStateFlow = MutableStateFlow(0.0f)
     private val noteStateFlow = MutableStateFlow("")
-    private val diffPitchStateFlow = MutableStateFlow(0.0f)
+    private val diffPitchStateFlow = MutableStateFlow(0)
 
     private var safeStopAudioRunnable: SafeStopAudioRunnable? = null
 
@@ -94,11 +94,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun processPitch(pitchInHz: Float) {
-        Log.d("shinobue", "$pitchInHz")
         pitchInHzStateFlow.value = pitchInHz
         val scale = ShinobueScale()(pitchInHz)
-        noteStateFlow.value = "${scale.first.ja}/${scale.first.en}"
+        noteStateFlow.value = "${scale.first.scaleType.ja}/${scale.first.scaleType.en}"
         diffPitchStateFlow.value = scale.second
+        Log.d("shinobue", "Hz: $pitchInHz Diff: ${scale.second}")
     }
 }
 
@@ -106,7 +106,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(
     modifier: Modifier = Modifier,
     hz: Float,
-    diffHz: Float,
+    diffHz: Int,
     note: String
 ) {
     Column(
@@ -133,6 +133,6 @@ fun Greeting(
 @Composable
 fun GreetingPreview() {
     ShinobueTunerTheme {
-        Greeting(hz = 130.81f, diffHz = 3.09f, note = "A")
+        Greeting(hz = 130.81f, diffHz = 10, note = "A")
     }
 }
