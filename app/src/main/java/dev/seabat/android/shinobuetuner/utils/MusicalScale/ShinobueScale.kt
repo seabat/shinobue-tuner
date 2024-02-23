@@ -5,6 +5,7 @@ import kotlin.math.roundToInt
 
 class ShinobueScale : MusicalScaleContract {
     override fun invoke(pitchInHz: Float): Pair<ShinobueScaleType, Int> {
+        // ド3
         return if (pitchInHz >= ShinobueScaleType.C3.startHz && pitchInHz < ShinobueScaleType.C3.endHz) {
             ShinobueScaleType.C3 to calcDiffRate(pitchInHz, ShinobueScaleType.C3)
         }
@@ -41,6 +42,8 @@ class ShinobueScale : MusicalScaleContract {
         else if(pitchInHz >= ShinobueScaleType.B3.startHz && pitchInHz < ShinobueScaleType.B3.endHz) {
             ShinobueScaleType.B3 to calcDiffRate(pitchInHz, ShinobueScaleType.B3)
         }
+
+        // ド4
         else if(pitchInHz >= ShinobueScaleType.C4.startHz && pitchInHz < ShinobueScaleType.C4.endHz) {
             ShinobueScaleType.C4 to calcDiffRate(pitchInHz, ShinobueScaleType.C4)
         }
@@ -77,6 +80,8 @@ class ShinobueScale : MusicalScaleContract {
         else if(pitchInHz >= ShinobueScaleType.B4.startHz && pitchInHz < ShinobueScaleType.B4.endHz) {
             ShinobueScaleType.B4 to calcDiffRate(pitchInHz, ShinobueScaleType.B4)
         }
+
+        // ド5
         else if(pitchInHz >= ShinobueScaleType.C5.startHz && pitchInHz < ShinobueScaleType.C5.endHz) {
             ShinobueScaleType.C5 to calcDiffRate(pitchInHz, ShinobueScaleType.C5)
         }
@@ -94,6 +99,80 @@ class ShinobueScale : MusicalScaleContract {
         }
         else if(pitchInHz >= ShinobueScaleType.F5.startHz && pitchInHz < ShinobueScaleType.F5.endHz) {
             ShinobueScaleType.F5 to calcDiffRate(pitchInHz, ShinobueScaleType.F5)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Fs5.startHz && pitchInHz < ShinobueScaleType.Fs5.endHz) {
+            ShinobueScaleType.Fs5 to calcDiffRate(pitchInHz, ShinobueScaleType.Fs5)
+        }
+        else if(pitchInHz >= ShinobueScaleType.G5.startHz && pitchInHz < ShinobueScaleType.G5.endHz) {
+            ShinobueScaleType.G5 to calcDiffRate(pitchInHz, ShinobueScaleType.G5)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Gs5.startHz && pitchInHz < ShinobueScaleType.Gs5.endHz) {
+            ShinobueScaleType.Gs5 to calcDiffRate(pitchInHz, ShinobueScaleType.Gs5)
+        }
+        else if(pitchInHz >= ShinobueScaleType.A5.startHz && pitchInHz < ShinobueScaleType.A5.endHz) {
+            ShinobueScaleType.A5 to calcDiffRate(pitchInHz, ShinobueScaleType.A5)
+        }
+        else if(pitchInHz >= ShinobueScaleType.As5.startHz && pitchInHz < ShinobueScaleType.As5.endHz) {
+            ShinobueScaleType.As5 to calcDiffRate(pitchInHz, ShinobueScaleType.As5)
+        }
+        else if(pitchInHz >= ShinobueScaleType.B5.startHz && pitchInHz < ShinobueScaleType.B5.endHz) {
+            ShinobueScaleType.B5 to calcDiffRate(pitchInHz, ShinobueScaleType.B5)
+        }
+
+        // ド6
+        else if(pitchInHz >= ShinobueScaleType.C6.startHz && pitchInHz < ShinobueScaleType.C6.endHz) {
+            ShinobueScaleType.C6 to calcDiffRate(pitchInHz, ShinobueScaleType.C6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Cs6.startHz && pitchInHz < ShinobueScaleType.Cs6.endHz) {
+            ShinobueScaleType.Cs6 to calcDiffRate(pitchInHz, ShinobueScaleType.Cs6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.D6.startHz && pitchInHz < ShinobueScaleType.D6.endHz) {
+            ShinobueScaleType.D6 to calcDiffRate(pitchInHz, ShinobueScaleType.D6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Ds6.startHz && pitchInHz < ShinobueScaleType.Ds6.endHz) {
+            ShinobueScaleType.Ds6 to calcDiffRate(pitchInHz, ShinobueScaleType.Ds6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.E6.startHz && pitchInHz < ShinobueScaleType.E6.endHz) {
+            ShinobueScaleType.E6 to calcDiffRate(pitchInHz, ShinobueScaleType.E6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.F6.startHz && pitchInHz < ShinobueScaleType.F6.endHz) {
+            ShinobueScaleType.F6 to calcDiffRate(pitchInHz, ShinobueScaleType.F6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Fs6.startHz && pitchInHz < ShinobueScaleType.Fs6.endHz) {
+            ShinobueScaleType.Fs6 to calcDiffRate(pitchInHz, ShinobueScaleType.Fs6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.G6.startHz && pitchInHz < ShinobueScaleType.G6.endHz) {
+            ShinobueScaleType.G6 to calcDiffRate(pitchInHz, ShinobueScaleType.G6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Gs6.startHz && pitchInHz < ShinobueScaleType.Gs6.endHz) {
+            ShinobueScaleType.Gs6 to calcDiffRate(pitchInHz, ShinobueScaleType.Gs6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.A6.startHz && pitchInHz < ShinobueScaleType.A6.endHz) {
+            ShinobueScaleType.A6 to calcDiffRate(pitchInHz, ShinobueScaleType.A6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.As6.startHz && pitchInHz < ShinobueScaleType.As6.endHz) {
+            ShinobueScaleType.As6 to calcDiffRate(pitchInHz, ShinobueScaleType.As6)
+        }
+        else if(pitchInHz >= ShinobueScaleType.B6.startHz && pitchInHz < ShinobueScaleType.B6.endHz) {
+            ShinobueScaleType.B6 to calcDiffRate(pitchInHz, ShinobueScaleType.B6)
+        }
+
+        // ド7
+        else if(pitchInHz >= ShinobueScaleType.C7.startHz && pitchInHz < ShinobueScaleType.C7.endHz) {
+            ShinobueScaleType.C7 to calcDiffRate(pitchInHz, ShinobueScaleType.C7)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Cs7.startHz && pitchInHz < ShinobueScaleType.Cs7.endHz) {
+            ShinobueScaleType.Cs7 to calcDiffRate(pitchInHz, ShinobueScaleType.Cs7)
+        }
+        else if(pitchInHz >= ShinobueScaleType.D7.startHz && pitchInHz < ShinobueScaleType.D7.endHz) {
+            ShinobueScaleType.D7 to calcDiffRate(pitchInHz, ShinobueScaleType.D7)
+        }
+        else if(pitchInHz >= ShinobueScaleType.Ds7.startHz && pitchInHz < ShinobueScaleType.Ds7.endHz) {
+            ShinobueScaleType.Ds7 to calcDiffRate(pitchInHz, ShinobueScaleType.Ds7)
+        }
+        else if(pitchInHz >= ShinobueScaleType.E7.startHz && pitchInHz < ShinobueScaleType.E7.endHz) {
+            ShinobueScaleType.E7 to calcDiffRate(pitchInHz, ShinobueScaleType.E7)
+
         } else {
             ShinobueScaleType.UNKNOWN to 0
         }
