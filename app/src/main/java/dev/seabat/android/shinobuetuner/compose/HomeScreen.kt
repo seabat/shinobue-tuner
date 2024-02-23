@@ -49,8 +49,8 @@ fun HomeScreen(
         mutableStateOf(ScaleInfo(0.0f, 0, ShinobueScaleType.UNKNOWN, 0L))
     }
 
-    if (recording && scaleInfo.count % speed == 0L) {
-        Log.d("shinobue", "Add List: ${scaleInfo.scaleType.scaleType.ja}")
+    if (recording && (scaleInfo.count != lastScale.count) && ((scaleInfo.count % speed) == 0L)) {
+        Log.d("shinobue", "Add List: scale=${scaleInfo.scaleType.scaleType.ja}, count=${scaleInfo.count}")
         scales.add(scaleInfo)
         lastScale = scaleInfo
     }
