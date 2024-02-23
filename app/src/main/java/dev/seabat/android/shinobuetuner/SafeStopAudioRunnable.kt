@@ -22,11 +22,11 @@ class SafeStopAudioRunnable(
     private val audioDispatcher: AudioDispatcher
 
     init {
-        val dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(44100, 1024, 0)
+        val dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(22050, 1024, 0)
         dispatcher.addAudioProcessor(
             PitchProcessor(
                 PitchProcessor.PitchEstimationAlgorithm.FFT_YIN,
-                44100f,
+                22050f,
                 1024,
                 createPitchDetectionHandler()
             )
