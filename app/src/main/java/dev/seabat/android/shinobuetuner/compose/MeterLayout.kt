@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.seabat.android.shinobuetuner.ui.theme.OzwaldTextStyle
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.MusicalScaleType
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
 import kotlin.math.roundToInt
@@ -33,11 +34,9 @@ fun MeterLayout(
             verticalAlignment = Alignment.Bottom
         ) {
                 Text(
-                    modifier = Modifier,
                     text = scaleType.scaleType.ja,
-                    color = Color.Black,
-                    fontSize =  70.sp,
-                    lineHeight = 105.sp
+                    lineHeight = 105.sp,
+                    style = OzwaldTextStyle.regular70Black
                 )
                 Text(
                     modifier = Modifier
@@ -47,8 +46,7 @@ fun MeterLayout(
                     } else {
                         scaleType.scaleType.level.toString()
                     },
-                    color = Color.Black,
-                    fontSize =  30.sp,
+                    style = OzwaldTextStyle.regular30Black
                 )
                 Text(
                     modifier = Modifier.padding(top = 0.dp, bottom = 13.dp),
@@ -57,8 +55,7 @@ fun MeterLayout(
                     } else {
                         "(${scaleType.scaleType.en})"
                     },
-                    color = Color.Black,
-                    fontSize =  30.sp,
+                    style = OzwaldTextStyle.regular30Black
                 )
         }
 
@@ -69,18 +66,17 @@ fun MeterLayout(
         ) {
             Text(
                 text = if (hz == -1.0f) "0" else hz.roundToInt().toString(),
-                color = Color.Black,
-                fontSize =  40.sp
+                style = OzwaldTextStyle.regular40Black
             )
             Text(
                 text = "Hz",
-                color = Color.Black,
-                fontSize =  30.sp
+                style = OzwaldTextStyle.regular30Black
             )
         }
         RateBar(diffRate)
     }
 }
+
 
 @Preview
 @Composable

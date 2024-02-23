@@ -3,7 +3,7 @@ package dev.seabat.android.shinobuetuner.utils.MusicalScale
 enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
     B2("シ", "B", 2),
     C3("ド", "C", 3),
-    Cs3("ド♯", "C#", 3),
+    Cs3("ド#", "C#", 3),
     D3("レ", "D", 3),
     Ds3("レ#", "D#", 3),
     E3("ミ", "E", 3),
@@ -15,7 +15,7 @@ enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
     As3("ラ#", "A#", 3),
     B3("シ", "B3", 3),
     C4("ド", "C", 4),
-    Cs4("ド♯", "C#", 4),
+    Cs4("ド#", "C#", 4),
     D4("レ", "D", 4),
     Ds4("レ#", "D#", 4),
     E4("ミ", "E", 4),
@@ -27,7 +27,7 @@ enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
     As4("ラ#", "A#", 4),
     B4("シ", "B", 4),
     C5("ド", "C", 5),
-    Cs5("ド♯", "C#", 5),
+    Cs5("ド#", "C#", 5),
     D5("レ", "D", 5),
     Ds5("レ#", "D#", 5),
     E5("ミ", "E", 5),
@@ -41,7 +41,7 @@ enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
 
     // ド6
     C6("ド", "C", 6),
-    Cs6("ド♯", "C#", 6),
+    Cs6("ド#", "C#", 6),
     D6("レ", "D", 6),
     Ds6("レ#", "D#", 6),
     E6("ミ", "E", 6),
@@ -55,7 +55,7 @@ enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
 
     // ド7
     C7("ド", "C", 7),
-    Cs7("ド♯", "C#", 7),
+    Cs7("ド#", "C#", 7),
     D7("レ", "D", 7),
     Ds7("レ#", "D#", 7),
     E7("ミ", "E", 7),
@@ -69,7 +69,7 @@ enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
 
     // ド8
     C8("ド", "C", 8),
-    Cs8("ド♯", "C#", 8),
+    Cs8("ド#", "C#", 8),
     D8("レ", "D", 8),
     Ds8("レ#", "D#", 8),
     E8("ミ", "E", 8),
