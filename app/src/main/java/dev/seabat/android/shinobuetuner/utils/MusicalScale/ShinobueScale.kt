@@ -202,7 +202,7 @@ class ShinobueScale : MusicalScaleContract {
         // 四捨五入する
         val round = diffRate.roundToInt()
 
-        Log.d("shinobue", "diff=$diff diffRate=$diffRate")
+//      Log.d("shinobue", "diff=$diff diffRate=$diffRate")
         return round
     }
 }

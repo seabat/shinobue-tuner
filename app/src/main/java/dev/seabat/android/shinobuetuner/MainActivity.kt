@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
             scaleType = scale.first,
             count = scaleInfoStateFlow.value.count+1
         )
-        Log.d("shinobue", "Hz: $pitchInHz Diff: ${scale.second}")
+//        Log.d("shinobue", "Hz: $pitchInHz Diff: ${scale.second}")
     }
 }
 

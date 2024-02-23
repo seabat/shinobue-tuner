@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -44,9 +45,14 @@ fun HomeScreen(
     var speed by remember { mutableStateOf(20L) }
 
     val scales = remember { mutableStateListOf<ScaleInfo>() }
+    var lastScale by remember {
+        mutableStateOf(ScaleInfo(0.0f, 0, ShinobueScaleType.UNKNOWN, 0L))
+    }
+
     if (recording && scaleInfo.count % speed == 0L) {
         Log.d("shinobue", "Add List: ${scaleInfo.scaleType.scaleType.ja}")
         scales.add(scaleInfo)
+        lastScale = scaleInfo
     }
 
     Box(
@@ -131,6 +137,29 @@ fun HomeScreen(
                         Text(text = it.scaleType.scaleType.ja)
                     }
                 }
+            }
+        }
+
+        GoodBadImage(scaleInfo = lastScale) {
+            if (it == GoodBadType.NORMAL) {
+                Text(text = "")
+            } else {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .size(100.dp)
+                        .padding(0.dp)
+                        .alpha(0.8f)
+                    ,
+                    painter = painterResource(
+                        id = if (it == GoodBadType.GOOD) {
+                            R.drawable.good
+                        } else {
+                            R.drawable.bad
+                        }
+                    ),
+                    contentDescription = ""
+                )
             }
         }
     }
