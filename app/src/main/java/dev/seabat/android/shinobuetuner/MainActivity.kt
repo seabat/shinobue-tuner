@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import be.tarsos.dsp.pitch.PitchDetectionHandler
 import dev.seabat.android.shinobuetuner.compose.HomeScreen
+import dev.seabat.android.shinobuetuner.compose.ScaleInfo
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScale
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
@@ -27,9 +28,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private val pitchInHzStateFlow = MutableStateFlow(0.0f)
-    private val noteStateFlow = MutableStateFlow(ShinobueScaleType.UNKNOWN)
-    private val diffPitchStateFlow = MutableStateFlow(0)
+    private val scaleInfoStateFlow = MutableStateFlow(ScaleInfo(0.0f, 0, ShinobueScaleType.UNKNOWN, 0L))
 
     private var safeStopAudioRunnable: SafeStopAudioRunnable? = null
 
@@ -57,9 +56,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val pitchInHzState by pitchInHzStateFlow.collectAsState()
-            val noteState by noteStateFlow.collectAsState()
-            val diffPitchState by diffPitchStateFlow.collectAsState()
+            val scaleInfoState by scaleInfoStateFlow.collectAsState()
 
             ShinobueTunerTheme {
                 // A surface container using the 'background' color from the theme
@@ -67,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(hz = pitchInHzState, diffRate = diffPitchState, scaleType = noteState)
+                    HomeScreen(scaleInfo = scaleInfoState)
                 }
             }
         }
@@ -93,10 +90,13 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun processPitch(pitchInHz: Float) {
-        pitchInHzStateFlow.value = pitchInHz
         val scale = ShinobueScale()(pitchInHz)
-        noteStateFlow.value = scale.first
-        diffPitchStateFlow.value = scale.second
+        scaleInfoStateFlow.value = ScaleInfo(
+            hz = pitchInHz,
+            diffRate = scale.second,
+            scaleType = scale.first,
+            count = scaleInfoStateFlow.value.count+1
+        )
         Log.d("shinobue", "Hz: $pitchInHz Diff: ${scale.second}")
     }
 }

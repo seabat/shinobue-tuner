@@ -4,6 +4,9 @@ import android.util.Log
 import kotlin.math.roundToInt
 
 class ShinobueScale : MusicalScaleContract {
+    /**
+     * @return ShinobueScaleType: スケール、 Int: 音階 Hz と実際の Hz との差分(100分率)
+     */
     override fun invoke(pitchInHz: Float): Pair<ShinobueScaleType, Int> {
         // ド3
         return if (pitchInHz >= ShinobueScaleType.C3.startHz && pitchInHz < ShinobueScaleType.C3.endHz) {
@@ -180,6 +183,14 @@ class ShinobueScale : MusicalScaleContract {
 
     /**
      * 音階 Hz と実際の Hz との差分の100分率を求める
+     *
+     * 例
+     *   C5 は 音階 Hz 525.630 、範囲は 510.666f 〜 541.032f630f
+     *   実 Hz 530 の場合、
+     *   maxDiff  = (541.032f630f - 510.666) / 2 = 15.183
+     *   diff     =  530 - 525.630 = 4.37
+     *   diffRate =  4.37 / 15.183 * 100 = 28.782
+     *   round = 29 %
      */
     private fun calcDiffRate(hz: Float, scaleType: ShinobueScaleType): Int {
         val maxDiff = (scaleType.endHz - scaleType.startHz)/2

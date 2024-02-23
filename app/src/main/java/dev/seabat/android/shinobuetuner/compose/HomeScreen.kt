@@ -1,19 +1,28 @@
 package dev.seabat.android.shinobuetuner.compose
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -22,19 +31,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
-import kotlin.math.roundToInt
 import dev.seabat.android.shinobuetuner.R
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    hz: Float,
-    diffRate: Int,
-    scaleType: ShinobueScaleType
+    scaleInfo: ScaleInfo
 ) {
+    var recording by remember { mutableStateOf(false) }
+    var speed by remember { mutableStateOf(20L) }
+
+    val scales = remember { mutableStateListOf<ScaleInfo>() }
+    if (recording && scaleInfo.count % speed == 0L) {
+        Log.d("shinobue", "Add List: ${scaleInfo.scaleType.scaleType.ja}")
+        scales.add(scaleInfo)
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -52,66 +66,72 @@ fun HomeScreen(
         )
         Column(
             modifier = Modifier
-                .align(Alignment.Center)
-                .padding(30.dp),
-            verticalArrangement = Arrangement.Center,
+                .align(Alignment.TopCenter)
+                .fillMaxSize()
+                .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(verticalAlignment = Alignment.Bottom) {
-                if (scaleType == ShinobueScaleType.UNKNOWN) {
+            MeterLayout(
+                hz = scaleInfo.hz,
+                diffRate = scaleInfo.diffRate,
+                scaleType = scaleInfo.scaleType
+            )
+            Row {
+                Button(onClick = { recording = !recording }) {
                     Text(
-                        text = "",
-                        color = Color.Black,
-                        fontSize =  70.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
-                        text = "",
-                        color = Color.Black,
-                        fontSize =  30.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
-                        text = "",
-                        color = Color.Black,
-                        fontSize =  30.sp
-                    )
-                } else {
-                    Text(
-                        text = scaleType.scaleType.ja,
-                        color = Color.Black,
-                        fontSize =  70.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
-                        text = scaleType.scaleType.level.toString(),
-                        color = Color.Black,
-                        fontSize =  30.sp
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 0.dp, bottom = 10.dp),
-                        text = "(${scaleType.scaleType.en})",
-                        color = Color.Black,
-                        fontSize =  30.sp
+                        text= if (recording) {
+                            "記録終了"
+                        } else {
+                            "記録開始"
+                        }
                     )
                 }
+                Button(
+                    modifier = Modifier.padding(start = 15.dp),
+                    onClick = {
+                        when(speed) {
+                            5L -> speed = 20L
+                            10L -> speed = 5L
+                            20L -> speed = 10L
+                        }
+                        scales.clear()
+                    }
+                ) {
+                    Text(
+                        text= when(speed) {
+                        5L -> "超高速"
+                        10L -> "高速"
+                        20L -> "低速"
+                            else -> {""}
+                        })
+                }
+                Button(
+                    modifier = Modifier.padding(start = 15.dp),
+                    onClick = { scales.clear() }
+                ) {
+                    Text(text= "クリア")
+                }
             }
-            Row(
-                modifier = Modifier,
-                verticalAlignment = Alignment.Bottom
+
+            val listState = rememberLazyListState()
+            LaunchedEffect(scales.size) {
+                if (scales.size > 1) {
+                    listState.animateScrollToItem(scales.size - 1)
+                }
+            }
+
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.padding(top = 10.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = if (hz == -1.0f) "0" else hz.roundToInt().toString(),
-                    color = Color.Black,
-                    fontSize =  40.sp
-                )
-                Text(
-                    text = "Hz",
-                    color = Color.Black,
-                    fontSize =  30.sp
-                )
+                items(items = scales) {
+                    Row {
+                        Text(text = it.diffRate.toString())
+                        Text(text = it.scaleType.scaleType.ja)
+                    }
+                }
             }
-            RateBar(diffRate)
         }
     }
 }
@@ -129,246 +149,19 @@ fun RateBox(color: Color) {
     )
 }
 
-@Composable
-fun RateBar(diffRate: Int) {
-    Row(modifier = Modifier.padding(vertical = 30.dp)) {
-        when((diffRate/10.0f).roundToInt()) {
-            -10 -> {
-                for (i in 1..10) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -9 -> {
-                for (i in 1..1) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..9) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -8 -> {
-                for (i in 1..2) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..8) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -7 -> {
-                for (i in 1..3) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..7) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -6 -> {
-                for (i in 1..4) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..6) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -5 -> {
-                for (i in 1..5) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..5) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -4 -> {
-                for (i in 1..6) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..4) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -3 -> {
-                for (i in 1..7) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..3) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -2 -> {
-                for (i in 1..8) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..2) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            -1 -> {
-                for (i in 1..9) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..1) {
-                    RateBox(Color.Red)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            0 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-            }
-            1 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..1) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..9) {
-                    RateBox(Color.White)
-                }
-            }
-            2 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..2) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..8) {
-                    RateBox(Color.White)
-                }
-            }
-            3 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..3) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..7) {
-                    RateBox(Color.White)
-                }
-            }
-            4 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..4) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..6) {
-                    RateBox(Color.White)
-                }
-            }
-            5 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..5) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..5) {
-                    RateBox(Color.White)
-                }
-            }
-            6 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..6) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..4) {
-                    RateBox(Color.White)
-                }
-            }
-            7 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..7) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..3) {
-                    RateBox(Color.White)
-                }
-            }
-            8 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..8) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..2) {
-                    RateBox(Color.White)
-                }
-            }
-            9 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..9) {
-                    RateBox(Color.Blue)
-                }
-                for (i in 1..1) {
-                    RateBox(Color.White)
-                }
-            }
-            10 -> {
-                for (i in 1..10) {
-                    RateBox(Color.White)
-                }
-                for (i in 1..10) {
-                    RateBox(Color.Blue)
-                }
-            }
-        }
-    }
-}
 
-@Preview
-@Composable
-fun RateBarPreview() {
-    RateBar(10)
-}
 
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     ShinobueTunerTheme {
-        HomeScreen(hz = 130.81f, diffRate = 10, scaleType = ShinobueScaleType.A4)
+        HomeScreen(
+            scaleInfo = ScaleInfo(
+                hz = 130.81f,
+                diffRate = 10,
+                scaleType = ShinobueScaleType.A4,
+                count = 1L
+            )
+        )
     }
 }
