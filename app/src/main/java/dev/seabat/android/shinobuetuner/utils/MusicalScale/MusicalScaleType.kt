@@ -3,11 +3,11 @@ package dev.seabat.android.shinobuetuner.utils.MusicalScale
 /**
  * TODO
  *
- * @property ja 六本調子(B♭)の相対音高
- * @property en ピアノ鍵盤の絶対音高
+ * @property tuneScale 六本調子(B♭)の相対音高 ♭#
+ * @property absoluteScale ピアノ鍵盤の絶対音高
  * @property level
  */
-enum class MusicalScaleType(val ja: String, val en: String, val level: Int) {
+enum class MusicalScaleType(val tuneScale: String, val absoluteScale: String, val level: Int) {
     B2("", "B", 2),
     C3("レ", "C", 3),
     Cs3("", "C#", 3),

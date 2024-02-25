@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +33,7 @@ fun MeterLayout(
             verticalAlignment = Alignment.Bottom
         ) {
                 Text(
-                    text = scaleType.scaleType.ja,
+                    text = scaleType.scaleType.tuneScale,
                     lineHeight = 105.sp,
                     style = OzwaldTextStyle.regular70Black
                 )
@@ -53,7 +52,7 @@ fun MeterLayout(
                     text = if (scaleType.scaleType == MusicalScaleType.UNKNOWN) {
                         ""
                     } else {
-                        "(${scaleType.scaleType.en})"
+                        "(${scaleType.scaleType.absoluteScale})"
                     },
                     style = OzwaldTextStyle.regular30Black
                 )

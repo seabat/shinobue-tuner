@@ -1,6 +1,5 @@
 package dev.seabat.android.shinobuetuner.compose
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,7 +50,7 @@ fun HomeScreen(
     }
 
     if (recording && (scaleInfo.count != lastScale.count) && ((scaleInfo.count % speed) == 0L)) {
-        Log.d("shinobue", "Add List: scale=${scaleInfo.scaleType.scaleType.ja}, count=${scaleInfo.count}")
+//        Log.d("shinobue", "Add List: scale=${scaleInfo.scaleType.scaleType.tuneScale}, count=${scaleInfo.count}")
         scales.add(scaleInfo)
         lastScale = scaleInfo
     }
@@ -139,36 +138,38 @@ fun HomeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(items = scales) {
-                    Row {
-//                        Text(text = it.diffRate.toString(), style = OzwaldTextStyle.regular14Black)
-                        Text(text = it.scaleType.scaleType.ja, style = OzwaldTextStyle.regular14Black)
-                    }
-                }
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            modifier = Modifier.padding(end = 10.dp),
+                            text = it.scaleType.scaleType.tuneScale,
+                            style = OzwaldTextStyle.regular18Black
+                        )
+                        GoodBadImage(scaleInfo = it) {
+                            if (it == GoodBadType.NORMAL) {
+                                Text(text = "")
+                            } else {
+                                Image(
+                                    modifier = Modifier
+                                        .size(16.dp)
+                                        .padding(0.dp)
+                                        .alpha(0.8f)
+                                    ,
+                                    painter = painterResource(
+                                        id = if (it == GoodBadType.GOOD) {
+                                            R.drawable.like
+                                        } else {
+                                            R.drawable.unlike
+                                        }
+                                    ),
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+                    } // Row
+                } // item
             }
         }
 
-        GoodBadImage(scaleInfo = lastScale) {
-            if (it == GoodBadType.NORMAL) {
-                Text(text = "")
-            } else {
-                Image(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .size(100.dp)
-                        .padding(0.dp)
-                        .alpha(0.8f)
-                    ,
-                    painter = painterResource(
-                        id = if (it == GoodBadType.GOOD) {
-                            R.drawable.good
-                        } else {
-                            R.drawable.bad
-                        }
-                    ),
-                    contentDescription = ""
-                )
-            }
-        }
     }
 }
 

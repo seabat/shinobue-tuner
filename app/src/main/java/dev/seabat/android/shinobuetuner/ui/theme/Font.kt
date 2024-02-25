@@ -41,6 +41,15 @@ object OzwaldTextStyle {
             includeFontPadding = false
         )
     )
+    val regular18Black = TextStyle(
+        fontFamily = Ozwald,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        color = Color.Black,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = false
+        )
+    )
     val regular16Black = TextStyle(
         fontFamily = Ozwald,
         fontWeight = FontWeight.Normal,
