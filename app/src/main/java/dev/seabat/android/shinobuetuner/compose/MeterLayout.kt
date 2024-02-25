@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.seabat.android.shinobuetuner.ui.theme.OzwaldTextStyle
+import dev.seabat.android.shinobuetuner.ui.theme.RobotTextStyle
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.MusicalScaleType
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
 import kotlin.math.roundToInt
@@ -34,8 +35,8 @@ fun MeterLayout(
         ) {
                 Text(
                     text = scaleType.scaleType.tuneScale,
-                    lineHeight = 105.sp,
-                    style = OzwaldTextStyle.regular70Black
+                    lineHeight = 100.sp,
+                    style = OzwaldTextStyle.regular70Black // Robot フォントは lineHeight が効かない
                 )
                 Text(
                     modifier = Modifier
@@ -45,7 +46,7 @@ fun MeterLayout(
                     } else {
                         scaleType.scaleType.level.toString()
                     },
-                    style = OzwaldTextStyle.regular30Black
+                    style = RobotTextStyle.regular30Black
                 )
                 Text(
                     modifier = Modifier.padding(top = 0.dp, bottom = 13.dp),
@@ -54,7 +55,7 @@ fun MeterLayout(
                     } else {
                         "(${scaleType.scaleType.absoluteScale})"
                     },
-                    style = OzwaldTextStyle.regular30Black
+                    style = RobotTextStyle.regular30Black
                 )
         }
 
@@ -65,11 +66,11 @@ fun MeterLayout(
         ) {
             Text(
                 text = if (hz == -1.0f) "0" else hz.roundToInt().toString(),
-                style = OzwaldTextStyle.regular40Black
+                style = RobotTextStyle.regular40Black
             )
             Text(
                 text = "Hz",
-                style = OzwaldTextStyle.regular30Black
+                style = RobotTextStyle.regular30Black
             )
         }
         RateBar(diffRate)

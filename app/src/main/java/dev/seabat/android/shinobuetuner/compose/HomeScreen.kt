@@ -33,7 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.seabat.android.shinobuetuner.ui.theme.ShinobueTunerTheme
 import dev.seabat.android.shinobuetuner.R
-import dev.seabat.android.shinobuetuner.ui.theme.OzwaldTextStyle
+import dev.seabat.android.shinobuetuner.ui.theme.RobotTextStyle
 import dev.seabat.android.shinobuetuner.utils.MusicalScale.ShinobueScaleType
 
 @Composable
@@ -90,7 +90,7 @@ fun HomeScreen(
                         } else {
                             "記録開始"
                         },
-                        style = OzwaldTextStyle.regular16Black
+                        style = RobotTextStyle.bold16Black
                     )
                 }
                 Button(
@@ -111,7 +111,7 @@ fun HomeScreen(
                         20L -> "低速"
                             else -> {""}
                         },
-                        style = OzwaldTextStyle.regular16Black
+                        style = RobotTextStyle.bold16Black
                     )
                 }
                 Button(
@@ -120,7 +120,7 @@ fun HomeScreen(
                 ) {
                     Text(
                         text= "クリア",
-                        style = OzwaldTextStyle.regular16Black
+                        style = RobotTextStyle.bold16Black
                     )
                 }
             }
@@ -142,7 +142,7 @@ fun HomeScreen(
                         Text(
                             modifier = Modifier.padding(end = 10.dp),
                             text = it.scaleType.scaleType.tuneScale,
-                            style = OzwaldTextStyle.regular18Black
+                            style = RobotTextStyle.regular18Black
                         )
                         GoodBadImage(scaleInfo = it) {
                             if (it == GoodBadType.NORMAL) {
