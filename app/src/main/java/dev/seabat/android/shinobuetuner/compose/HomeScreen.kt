@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -140,20 +142,19 @@ fun HomeScreen(
                 items(items = scales) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            modifier = Modifier.padding(end = 10.dp),
+                            modifier = Modifier.width(25.dp),
                             text = it.scaleType.scaleType.tuneScale,
                             style = RobotTextStyle.regular18Black
                         )
                         GoodBadImage(scaleInfo = it) {
                             if (it == GoodBadType.NORMAL) {
-                                Text(text = "")
+                                Text(
+                                    modifier = Modifier.height(16.dp).width(24.dp)
+                                    , text = ""
+                                )
                             } else {
                                 Image(
-                                    modifier = Modifier
-                                        .size(16.dp)
-                                        .padding(0.dp)
-                                        .alpha(0.8f)
-                                    ,
+                                    modifier = Modifier.height(16.dp).width(24.dp).padding(0.dp).alpha(0.8f),
                                     painter = painterResource(
                                         id = if (it == GoodBadType.GOOD) {
                                             R.drawable.like
