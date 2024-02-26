@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -136,41 +137,15 @@ fun HomeScreen(
 
             LazyColumn(
                 state = listState,
-                modifier = Modifier.padding(top = 10.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.padding(top = 10.dp).fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                reverseLayout= true
             ) {
                 items(items = scales) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            modifier = Modifier.width(25.dp),
-                            text = it.scaleType.scaleType.tuneScale,
-                            style = RobotTextStyle.regular18Black
-                        )
-                        GoodBadImage(scaleInfo = it) {
-                            if (it == GoodBadType.NORMAL) {
-                                Text(
-                                    modifier = Modifier.height(16.dp).width(24.dp)
-                                    , text = ""
-                                )
-                            } else {
-                                Image(
-                                    modifier = Modifier.height(16.dp).width(24.dp).padding(0.dp).alpha(0.8f),
-                                    painter = painterResource(
-                                        id = if (it == GoodBadType.GOOD) {
-                                            R.drawable.like
-                                        } else {
-                                            R.drawable.unlike
-                                        }
-                                    ),
-                                    contentDescription = ""
-                                )
-                            }
-                        }
-                    } // Row
-                } // item
+                    HomeScrollRow(it)
+                }
             }
         }
-
     }
 }
 

@@ -47,7 +47,7 @@ object RobotTextStyle {
     val regular18Black = TextStyle(
         fontFamily = Robot,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         color = Color.Black,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
